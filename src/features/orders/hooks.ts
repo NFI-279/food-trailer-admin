@@ -13,7 +13,7 @@ export function useActiveOrders() {
     queryFn: ordersApi.getActiveOrders,
     // Poll every 10 seconds to look for new orders! 
     // This simulates real-time updates until we add Socket.IO later.
-    refetchInterval: 10000, 
+    refetchInterval: 3000, 
   });
 }
 
