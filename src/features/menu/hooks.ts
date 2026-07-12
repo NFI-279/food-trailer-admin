@@ -1,6 +1,7 @@
 // src/features/menu/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { menuApi } from "./api";
+import { MenuItemInput } from "./types";
 
 // Query Key factory (best practice to avoid typos)
 export const menuKeys = {
