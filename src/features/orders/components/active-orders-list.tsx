@@ -1,9 +1,10 @@
-// src/features/orders/components/active-orders-list.tsx
+// [Frontend] src/features/orders/components/active-orders-list.tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useActiveOrders } from "../hooks";
 import { useSettings } from "@/features/settings/hooks";
+import { useLanguage } from "@/providers/LanguageProvider"; // <-- IMPORT HOOK
 import { OrderCard } from "./order-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ClipboardCheck } from "lucide-react";
@@ -11,22 +12,33 @@ import { ClipboardCheck } from "lucide-react";
 export function ActiveOrdersList() {
   const { data: orders, isLoading, isError } = useActiveOrders();
   const { data: settings } = useSettings();
-  
-  // Keep track of how many orders we had last time it checked
-  const previousOrderCount = useRef(0);
+  const { t } = useLanguage(); // <-- INIT HOOK
 
   useEffect(() => {
     if (!orders || !settings) return;
 
-    // If the number of active orders went UP, and we are NOT muted
-    if (orders.length > previousOrderCount.current && !settings.muteKitchenDing) {
-      // Play the sound!
-      const audio = new Audio("/ding.mp3");
-      audio.play().catch((e) => console.log("Audio play blocked by browser:", e));
-    }
+    // Grab the list of order IDs we have already played a sound for
+    const notified = JSON.parse(sessionStorage.getItem("notified_orders") || "[]");
+    let hasNewOrder = false;
 
-    // Update the ref for the next time TanStack Query polls the database
-    previousOrderCount.current = orders.length;
+    orders.forEach((order) => {
+      // If we see an ID we haven't dinged for yet...
+      if (!notified.includes(order.id)) {
+        hasNewOrder = true;
+        notified.push(order.id);
+      }
+    });
+
+    if (hasNewOrder) {
+      // Save the updated list back to memory
+      sessionStorage.setItem("notified_orders", JSON.stringify(notified));
+      
+      // Play the sound!
+      if (!settings.muteKitchenDing) {
+        const audio = new Audio("/ding.mp3");
+        audio.play().catch((e) => console.log("Audio play blocked by browser:", e));
+      }
+    }
   }, [orders, settings]);
 
   if (isLoading) {
@@ -37,14 +49,15 @@ export function ActiveOrdersList() {
     );
   }
 
-  if (isError) return <div className="text-destructive font-semibold">Failed to load active orders.</div>;
+  if (isError) return <div className="text-destructive font-semibold">Error.</div>;
 
   if (!orders || orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-[50vh] text-muted-foreground bg-muted/10 rounded-2xl border-2 border-dashed">
         <ClipboardCheck className="h-16 w-16 mb-4 opacity-50" />
-        <h3 className="text-xl font-bold">No active orders</h3>
-        <p>You're all caught up! Time to clean the grill.</p>
+        {/* TRANSLATED! */}
+        <h3 className="text-xl font-bold">{t.orders.noActive}</h3>
+        <p>{t.orders.noActiveDesc}</p>
       </div>
     );
   }
