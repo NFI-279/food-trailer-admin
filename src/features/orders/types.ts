@@ -1,20 +1,20 @@
-// src/features/orders/types.ts
-
-export type OrderStatus = "PENDING" | "PREPARING" | "COMPLETED" | "CANCELLED";
+// [Frontend Admin] src/features/orders/types.ts
+export type OrderStatus = "UNPAID" | "PENDING" | "PREPARING" | "COMPLETED" | "CANCELLED";
 
 export interface OrderItem {
   id: string;
-  name: string; // We copy the name here so if the menu changes, the receipt doesn't break
+  name: string; 
   quantity: number;
-  notes?: string; // E.g., "Fără muștar" or "Extra sos"
+  notes?: string; 
 }
 
 export interface Order {
   id: string;
-  orderNumber: string; // The number printed on the receipt/given to the customer (e.g., #014)
+  orderNumber: string; 
   items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
-  createdAt: string; // ISO date string
-  updatedAt: string;
+  paymentMethod: string; // <-- ADD THIS
+  createdAt: string; 
+  updatedAt: string; 
 }
