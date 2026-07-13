@@ -33,22 +33,24 @@ export function RevenueChart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full h-[350px]">
-          <BarChart accessibilityLayer data={chartData} margin={{ top: 20, left: 12, right: 12 }}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis
-              dataKey="day"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ChartContainer>
+       <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          <ChartContainer config={chartConfig} className="min-w-[500px] min-h-[200px] w-full h-[350px]">
+            <BarChart accessibilityLayer data={chartData} margin={{ top: 20, left: 12, right: 12 }}>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis
+                dataKey="day"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <ChartTooltip
+                cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   );
