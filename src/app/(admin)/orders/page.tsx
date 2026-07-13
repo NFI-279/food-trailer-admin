@@ -19,25 +19,25 @@ export default function OrdersPage() {
 
       <Tabs defaultValue="unpaid" className="flex-1 flex flex-col">
         {/* Changed grid-cols-2 to grid-cols-3 so all 3 tabs fit perfectly! */}
-        <TabsList className="grid w-full max-w-2xl grid-cols-3 h-14 p-1 mb-6 bg-slate-200 dark:bg-slate-800 rounded-xl">
+        <TabsList className="flex overflow-x-auto w-full max-w-full h-auto p-1 mb-6 bg-slate-200 dark:bg-slate-800 rounded-xl [&::-webkit-scrollbar]:hidden snap-x">
           
           <TabsTrigger 
             value="unpaid" 
-            className="h-full text-sm sm:text-base font-bold rounded-lg text-slate-500 hover:text-slate-900 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-md transition-all"
+            className="flex-1 shrink-0 whitespace-nowrap snap-center px-6 py-3 text-sm sm:text-base font-bold rounded-lg text-slate-500 hover:text-slate-900 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-md transition-all"
           >
             {t.orders.tabUnpaid}
           </TabsTrigger>
           
           <TabsTrigger 
             value="active" 
-            className="h-full text-sm sm:text-base font-bold rounded-lg text-slate-500 hover:text-slate-900 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-md transition-all"
+            className="flex-1 shrink-0 whitespace-nowrap snap-center px-6 py-3 text-sm sm:text-base font-bold rounded-lg text-slate-500 hover:text-slate-900 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-md transition-all"
           >
             {t.orders.tabActive}
           </TabsTrigger>
           
           <TabsTrigger 
             value="completed" 
-            className="h-full text-sm sm:text-base font-bold rounded-lg text-slate-500 hover:text-slate-900 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-md transition-all"
+            className="flex-1 shrink-0 whitespace-nowrap snap-center px-6 py-3 text-sm sm:text-base font-bold rounded-lg text-slate-500 hover:text-slate-900 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-md transition-all"
           >
             {t.orders.tabCompleted}
           </TabsTrigger>
