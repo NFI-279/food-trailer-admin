@@ -7,6 +7,7 @@ export const settingsSchema = z.object({
   closeTime: z.string().min(5),
   overrideOpen: z.boolean(),
   muteKitchenDing: z.boolean(),
+  adminLanguage: z.string().optional(),
 });
 
 export type SettingsInput = z.infer<typeof settingsSchema>;
