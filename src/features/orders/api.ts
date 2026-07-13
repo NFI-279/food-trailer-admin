@@ -17,4 +17,7 @@ export const ordersApi = {
 
   cancelOrder: (id: string): Promise<void> => 
     apiFetch(`/orders/${id}/cancel`, { method: "PATCH" }),
+
+  getUnpaidOrders: (): Promise<Order[]> => apiFetch("/orders/unpaid"),
+  markPaid: (id: string): Promise<void> => apiFetch(`/orders/${id}/pay`, { method: "PATCH" }),
 };
