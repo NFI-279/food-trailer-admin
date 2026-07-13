@@ -1,6 +1,6 @@
 // src/features/orders/types.ts
 
-export type OrderStatus = "ACTIVE" | "COMPLETED";
+export type OrderStatus = "PENDING" | "PREPARING" | "COMPLETED" | "CANCELLED";
 
 export interface OrderItem {
   id: string;
