@@ -2,12 +2,14 @@
 "use client";
 
 import { Order } from "../types";
-import { useCompleteOrder, useRevertOrder, useStartOrder, useCancelOrder } from "../hooks";
+// 1. Cleaned up imports and added useMarkPaid!
+import { useCompleteOrder, useRevertOrder, useStartOrder, useCancelOrder, useMarkPaid } from "../hooks";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, CheckCircle, RotateCcw, ChefHat, X } from "lucide-react";
+// 2. Added Banknote icon!
+import { Clock, CheckCircle, RotateCcw, ChefHat, X, Banknote } from "lucide-react";
 import { toast } from "sonner";
 
 interface OrderCardProps {
@@ -19,6 +21,9 @@ export function OrderCard({ order }: OrderCardProps) {
   const completeMutation = useCompleteOrder();
   const revertMutation = useRevertOrder();
   const cancelMutation = useCancelOrder();
+  
+  // 3. Initialize the new payment mutation!
+  const payMutation = useMarkPaid(); 
   
   const { t } = useLanguage();
 
@@ -45,9 +50,15 @@ export function OrderCard({ order }: OrderCardProps) {
     }
   };
 
+  // Helper to change the card header color based on status
+  let headerColor = "bg-muted/30"; // Default
+  if (order.status === 'UNPAID') headerColor = "bg-slate-200 dark:bg-slate-800";
+  if (order.status === 'PENDING') headerColor = "bg-amber-100 dark:bg-amber-900/30";
+
   return (
     <Card className={`flex flex-col h-full border-2 shadow-sm ${order.status === "COMPLETED" ? "bg-muted/50 border-muted opacity-80" : "border-muted"}`}>
-      <CardHeader className={`pb-3 flex flex-row items-center justify-between rounded-t-lg ${order.status === 'PENDING' ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-muted/30'}`}>
+      
+      <CardHeader className={`pb-3 flex flex-row items-center justify-between rounded-t-lg ${headerColor}`}>
         <CardTitle className="text-3xl font-black">#{order.orderNumber}</CardTitle>
         <Badge variant="secondary" className="flex items-center gap-1 text-sm px-2 py-1">
           <Clock className="h-4 w-4" />
@@ -70,7 +81,29 @@ export function OrderCard({ order }: OrderCardProps) {
 
       <CardFooter className="pt-4 border-t mt-auto">
         
-        {/* STATE 1: PENDING (Just arrived) */}
+        {/* NEW STATE: UNPAID (Waiting for Cash at the window) */}
+        {order.status === "UNPAID" && (
+          <div className="flex gap-2 w-full">
+            <Button 
+              className="flex-1 h-14 text-lg font-bold bg-emerald-500 hover:bg-emerald-600 text-white" 
+              onClick={() => payMutation.mutate(order.id)}
+              disabled={payMutation.isPending}
+            >
+              <Banknote className="mr-2 h-6 w-6" />
+              {payMutation.isPending ? "..." : t.orders.btnPay}
+            </Button>
+            <Button 
+              variant="outline" 
+              className="h-14 w-14 border-destructive text-destructive hover:bg-destructive hover:text-white" 
+              onClick={handleCancel}
+              disabled={cancelMutation.isPending}
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+        )}
+
+        {/* STATE 1: PENDING (Paid, sitting in the kitchen queue!) */}
         {order.status === "PENDING" && (
           <div className="flex gap-2 w-full">
             <Button 
@@ -92,7 +125,7 @@ export function OrderCard({ order }: OrderCardProps) {
           </div>
         )}
 
-        {/* STATE 2: PREPARING (Cooking) */}
+        {/* STATE 2: PREPARING (Cooking on the grill) */}
         {order.status === "PREPARING" && (
           <Button 
             className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 text-white" 
@@ -104,7 +137,7 @@ export function OrderCard({ order }: OrderCardProps) {
           </Button>
         )}
 
-        {/* STATE 3: COMPLETED */}
+        {/* STATE 3: COMPLETED (Handed to customer) */}
         {order.status === "COMPLETED" && (
           <Button 
             variant="outline"
