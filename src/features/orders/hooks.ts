@@ -5,6 +5,7 @@ import { ordersApi } from "./api";
 export const orderKeys = {
   active: ["orders", "active"] as const,
   completed: ["orders", "completed"] as const,
+  unpaid: ["orders", "unpaid"] as const, // <-- ADD THIS
 };
 
 export function useActiveOrders() {
