@@ -37,6 +37,8 @@ export const translations = {
       noCompletedDesc: "Orders finished today will appear here.",
       btnComplete: "Complete Order",
       btnRevert: "Revert to Active",
+      btnStart: "Start Cooking",
+      btnCancel: "Cancel",
     },
     menu: {
       title: "Menu Management",
@@ -153,6 +155,8 @@ export const translations = {
       noCompletedDesc: "Comenzile finalizate astăzi vor apărea aici.",
       btnComplete: "Finalizează Comanda",
       btnRevert: "Reactivare Comandă",
+      btnStart: "Începe Prepararea",
+      btnCancel: "Anulează",
     },
     menu: {
       title: "Gestionare Meniu",
