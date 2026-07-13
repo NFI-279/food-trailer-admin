@@ -72,3 +72,23 @@ export function useCancelOrder() {
     },
   });
 }
+
+export function useUnpaidOrders() {
+  return useQuery({
+    queryKey: orderKeys.unpaid,
+    queryFn: ordersApi.getUnpaidOrders,
+    refetchInterval: 3000, 
+  });
+}
+
+export function useMarkPaid() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ordersApi.markPaid,
+    onSuccess: () => {
+      // It moves from Unpaid -> Active!
+      queryClient.invalidateQueries({ queryKey: orderKeys.unpaid });
+      queryClient.invalidateQueries({ queryKey: orderKeys.active });
+    },
+  });
+}
