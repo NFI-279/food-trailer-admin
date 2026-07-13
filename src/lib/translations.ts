@@ -39,6 +39,10 @@ export const translations = {
       btnRevert: "Revert to Active",
       btnStart: "Start Cooking",
       btnCancel: "Cancel",
+      tabUnpaid: "⏳ Awaiting Payment",
+      noUnpaid: "No unpaid orders",
+      noUnpaidDesc: "All cash orders have been collected.",
+      btnPay: "Mark as Paid",
     },
     menu: {
       title: "Menu Management",
@@ -157,6 +161,10 @@ export const translations = {
       btnRevert: "Reactivare Comandă",
       btnStart: "Începe Prepararea",
       btnCancel: "Anulează",
+      tabUnpaid: "⏳ Așteaptă Plata",
+      noUnpaid: "Nicio comandă neplătită",
+      noUnpaidDesc: "Toate comenzile cash au fost încasate.",
+      btnPay: "Marchează ca Plătit",
     },
     menu: {
       title: "Gestionare Meniu",
