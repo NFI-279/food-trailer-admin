@@ -1,0 +1,17 @@
+{
+  "name": "Food Trailer Admin",
+  "short_name": "Trailer POS",
+  "description": "Admin POS system for the food trailer",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
