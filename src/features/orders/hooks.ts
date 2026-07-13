@@ -50,3 +50,24 @@ export function useRevertOrder() {
     },
   });
 }
+
+export function useStartOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ordersApi.startOrder,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: orderKeys.active }),
+  });
+}
+
+export function useCancelOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ordersApi.cancelOrder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: orderKeys.active });
+      // Invalidate dashboard and inventory because cancelling refunds the inventory!
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["inventory"] });
+    },
+  });
+}
