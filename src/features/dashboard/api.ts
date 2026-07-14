@@ -3,6 +3,8 @@ import { apiFetch } from "@/lib/api-client"; // <-- Import the wrapper
 
 export interface DashboardStats {
   revenueToday: number;
+  revenueCash: number;
+  revenueCard: number;
   ordersToday: number;
   activeOrders: number;
   lowStockItems: number;
