@@ -25,6 +25,8 @@ export const translations = {
       waiting: "Waiting to be prepared",
       runningLow: "Items running low!",
       allGood: "All stocks are good.",
+      cash: "Cash",
+      card: "Card",
     },
     orders: {
       title: "Order Management",
@@ -147,6 +149,8 @@ export const translations = {
       waiting: "Așteaptă prepararea",
       runningLow: "Produse pe terminate!",
       allGood: "Toate stocurile sunt OK.",
+      cash: "Cash",
+      card: "Card",
     },
     orders: {
       title: "Gestionare Comenzi",
