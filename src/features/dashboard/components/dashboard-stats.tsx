@@ -35,9 +35,15 @@ export function DashboardStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.revenueToday.toFixed(2)} RON</div>
-          <p className="text-xs text-muted-foreground pt-1">
-            +15% {t.dashboard.fromYesterday}
-          </p>
+          {/* NEW: Split the revenue visually! */}
+          <div className="flex items-center gap-2 mt-1">
+            <Badge variant="outline" className="text-xs text-muted-foreground bg-muted/50 font-normal">
+              {t.dashboard.cash}: <span className="font-bold ml-1 text-foreground">{stats.revenueCash.toFixed(2)}</span>
+            </Badge>
+            <Badge variant="outline" className="text-xs text-muted-foreground bg-muted/50 font-normal">
+              {t.dashboard.card}: <span className="font-bold ml-1 text-foreground">{stats.revenueCard.toFixed(2)}</span>
+            </Badge>
+          </div>
         </CardContent>
       </Card>
 
