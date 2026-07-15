@@ -1,29 +1,36 @@
-// [Frontend] src/components/auth-guard.tsx
+// [Frontend Admin] src/components/auth-guard.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
+// SECURITY FIX: Global flag so TanStack Query knows when it's safe to fetch!
+export let isAppAuthenticated = false;
+
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // LINT FIX: Initialize state safely
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !!localStorage.getItem("trailer_token");
+    }
+    return false;
+  });
 
   useEffect(() => {
-    // Check if the token exists in local storage
     const token = localStorage.getItem("trailer_token");
-    
     if (!token) {
-      // Kick them to the login page
+      isAppAuthenticated = false;
+      setIsAuthenticated(false);
       router.push("/login");
     } else {
-      // Let them in!
+      isAppAuthenticated = true;
       setIsAuthenticated(true);
     }
   }, [router, pathname]);
 
-  // Show a loading spinner while we check, so the sidebar doesn't flash on screen!
   if (!isAuthenticated) {
     return (
       <div className="h-screen w-screen flex flex-col items-center justify-center bg-muted/20">

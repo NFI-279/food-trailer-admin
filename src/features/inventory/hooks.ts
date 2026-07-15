@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { inventoryApi } from "./api";
 import { InventoryItemInput } from "./types";
+import { isAppAuthenticated } from "@/components/auth-guard";
 
 export const inventoryKeys = {
   all: ["inventory"] as const,
@@ -12,6 +13,7 @@ export function useInventory() {
     queryKey: inventoryKeys.all,
     queryFn: inventoryApi.getInventory,
     refetchInterval: 3000,
+    enabled: isAppAuthenticated,
   });
 }
 

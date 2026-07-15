@@ -17,7 +17,12 @@ export function ActiveOrdersList() {
   useEffect(() => {
     if (!orders || !settings) return;
 
-    let notified = JSON.parse(sessionStorage.getItem("notified_orders") || "[]");
+    let notified: string[] = [];
+    try {
+      notified = JSON.parse(sessionStorage.getItem("notified_orders") || "[]");
+    } catch {
+      notified = []; // If corrupt, start fresh!
+    }
     let hasNewOrder = false;
 
     orders.forEach((order) => {

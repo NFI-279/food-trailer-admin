@@ -1,6 +1,7 @@
 // src/features/orders/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ordersApi } from "./api";
+import { isAppAuthenticated } from "@/components/auth-guard";
 
 export const orderKeys = {
   active: ["orders", "active"] as const,
@@ -12,9 +13,8 @@ export function useActiveOrders() {
   return useQuery({
     queryKey: orderKeys.active,
     queryFn: ordersApi.getActiveOrders,
-    // Poll every 10 seconds to look for new orders! 
-    // This simulates real-time updates until we add Socket.IO later.
     refetchInterval: 3000, 
+    enabled: isAppAuthenticated, // <-- ADD THIS TO ALL 3 GET QUERIES!
   });
 }
 
@@ -35,7 +35,8 @@ export function useCompletedOrders() {
   return useQuery({
     queryKey: orderKeys.completed,
     queryFn: ordersApi.getCompletedOrders,
-    refetchInterval: 10000, // Keep it synced like the active ones
+    refetchInterval: 3000,
+    enabled: isAppAuthenticated,
   });
 }
 
@@ -77,7 +78,8 @@ export function useUnpaidOrders() {
   return useQuery({
     queryKey: orderKeys.unpaid,
     queryFn: ordersApi.getUnpaidOrders,
-    refetchInterval: 3000, 
+    refetchInterval: 3000,
+    enabled: isAppAuthenticated,
   });
 }
 

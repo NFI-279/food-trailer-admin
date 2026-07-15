@@ -27,9 +27,8 @@ export function SettingsForm() {
   const updateMutation = useUpdateSettings();
   const [isChangingPass, setIsChangingPass] = useState(false);
 
-  // 1. Initialize states with empty strings (must be ABOVE the if statement!)
-  const [openTime, setOpenTime] = useState("");
-  const [closeTime, setCloseTime] = useState("");
+  const [openTime, setOpenTime] = useState(settings?.openTime || "");
+  const [closeTime, setCloseTime] = useState(settings?.closeTime || "");
 
   // 2. When settings finally load from the database, update the states!
   useEffect(() => {

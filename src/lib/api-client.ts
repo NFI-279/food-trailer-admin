@@ -43,5 +43,12 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
 
   // Handle empty responses (like when we DELETE something)
   const text = await response.text();
-  return text ? JSON.parse(text) : null;
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    //console.error("Failed to parse API response as JSON:", text);
+    throw new Error("Received malformed data from the server.");
+  }
 }
