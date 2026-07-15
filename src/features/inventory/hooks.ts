@@ -15,20 +15,6 @@ export function useInventory() {
   });
 }
 
-export function useUpdateStock() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, newStock }: { id: string; newStock: number }) => 
-      inventoryApi.updateStock(id, newStock),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
-      // We also invalidate dashboard stats so the "Alerts" card updates!
-      queryClient.invalidateQueries({ queryKey: ["dashboard"] }); 
-    },
-  });
-}
-
 export function useCreateInventoryItem() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -55,6 +41,18 @@ export function useDeleteInventoryItem() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: inventoryApi.deleteItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+    },
+  });
+}
+
+export function useAdjustStock() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, delta }: { id: string; delta: number }) => 
+      inventoryApi.adjustStock(id, delta),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });

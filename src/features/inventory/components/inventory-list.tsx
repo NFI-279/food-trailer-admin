@@ -2,7 +2,7 @@
 "use client";
 
 import { EditInventoryDialog } from "./edit-inventory-dialog";
-import { useInventory, useUpdateStock, useDeleteInventoryItem } from "../hooks";
+import { useInventory, useAdjustStock, useDeleteInventoryItem } from "../hooks";
 import { Trash2, Plus, Minus, AlertCircle } from "lucide-react";
 import {
   Table,
@@ -18,7 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function InventoryList() {
   const { data: inventory, isLoading, isError } = useInventory();
-  const updateStock = useUpdateStock();
+  const adjustStock = useAdjustStock();
   const deleteStock = useDeleteInventoryItem();
 
   if (isLoading) {
@@ -108,10 +108,8 @@ export function InventoryList() {
                       variant="outline"
                       size="icon"
                       className="h-10 w-10 shrink-0"
-                      disabled={updateStock.isPending || item.currentStock <= 0}
-                      onClick={() =>
-                        updateStock.mutate({ id: item.id, newStock: item.currentStock - 1 })
-                      }
+                      disabled={adjustStock.isPending || item.currentStock <= 0}
+                      onClick={() => adjustStock.mutate({ id: item.id, delta: -1 })}
                     >
                       <Minus className="h-4 w-4" />
                     </Button>
@@ -124,10 +122,8 @@ export function InventoryList() {
                       variant="outline"
                       size="icon"
                       className="h-10 w-10 shrink-0"
-                      disabled={updateStock.isPending}
-                      onClick={() =>
-                        updateStock.mutate({ id: item.id, newStock: item.currentStock + 1 })
-                      }
+                      disabled={adjustStock.isPending}
+                      onClick={() => adjustStock.mutate({ id: item.id, delta: 1 })}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>

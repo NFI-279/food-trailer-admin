@@ -36,7 +36,8 @@ export function useWakeLock() {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (wakeLockRef.current) {
-        wakeLockRef.current.release();
+        // SECURITY FIX: Safely catch the promise rejection!
+        wakeLockRef.current.release().catch(console.error);
         wakeLockRef.current = null;
         console.log("Wake Lock released.");
       }

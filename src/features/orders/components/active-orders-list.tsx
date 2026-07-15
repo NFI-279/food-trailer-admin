@@ -17,12 +17,10 @@ export function ActiveOrdersList() {
   useEffect(() => {
     if (!orders || !settings) return;
 
-    // Grab the list of order IDs we have already played a sound for
-    const notified = JSON.parse(sessionStorage.getItem("notified_orders") || "[]");
+    let notified = JSON.parse(sessionStorage.getItem("notified_orders") || "[]");
     let hasNewOrder = false;
 
     orders.forEach((order) => {
-      // If we see an ID we haven't dinged for yet...
       if (!notified.includes(order.id)) {
         hasNewOrder = true;
         notified.push(order.id);
@@ -30,10 +28,13 @@ export function ActiveOrdersList() {
     });
 
     if (hasNewOrder) {
-      // Save the updated list back to memory
+      // SECURITY FIX: Prevent memory leak by keeping only the last 100 orders!
+      if (notified.length > 100) {
+        notified = notified.slice(-100);
+      }
+      
       sessionStorage.setItem("notified_orders", JSON.stringify(notified));
       
-      // Play the sound!
       if (!settings.muteKitchenDing) {
         const audio = new Audio("/ding.mp3");
         audio.play().catch((e) => console.log("Audio play blocked by browser:", e));
