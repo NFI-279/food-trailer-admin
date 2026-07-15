@@ -35,8 +35,7 @@ export function EditMenuItemDialog({ item }: { item: MenuItem }) {
           <DialogHeader>
             <DialogTitle>Edit Product</DialogTitle>
           </DialogHeader>
-          <MenuItemForm 
-            // @ts-ignore - Temporary bypass to allow passing initialData
+          <MenuItemForm
             initialData={item} 
             onSubmit={onSubmit} 
             isSubmitting={updateMutation.isPending} 

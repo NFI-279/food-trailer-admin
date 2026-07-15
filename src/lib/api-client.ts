@@ -32,10 +32,10 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     try {
       const errorData = await response.json();
       if (errorData && errorData.message) {
-        // Handle NestJS validation arrays or standard strings
         errorMessage = Array.isArray(errorData.message) ? errorData.message.join(', ') : errorData.message;
       }
-    } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch {
       // Ignore if it's not JSON
     }
     throw new Error(errorMessage);

@@ -4,7 +4,7 @@
 import { useEffect, useRef } from "react";
 
 export function useWakeLock() {
-  // We store the "lock" in a ref so we can release it later
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wakeLockRef = useRef<any>(null);
 
   useEffect(() => {
@@ -12,6 +12,7 @@ export function useWakeLock() {
       try {
         // Check if the browser actually supports this feature
         if ("wakeLock" in navigator) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           wakeLockRef.current = await (navigator as any).wakeLock.request("screen");
           console.log("Wake Lock is active! Screen will not sleep.");
         }
