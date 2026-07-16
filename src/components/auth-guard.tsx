@@ -5,9 +5,6 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-// SECURITY FIX: Global flag so TanStack Query knows when it's safe to fetch!
-export let isAppAuthenticated = false;
-
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -22,11 +19,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const token = localStorage.getItem("trailer_token");
     if (!token) {
-      isAppAuthenticated = false;
       setIsAuthenticated(false);
       router.push("/login");
     } else {
-      isAppAuthenticated = true;
       setIsAuthenticated(true);
     }
   }, [router, pathname]);
