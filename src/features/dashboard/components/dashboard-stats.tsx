@@ -7,7 +7,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Banknote, ShoppingBag, ClipboardList, AlertTriangle } from "lucide-react";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { Badge } from "@/components/ui/badge"; 
-import { isAppAuthenticated } from "@/components/auth-guard";
 
 export function DashboardStats() {
   const { data: stats, isLoading, isError } = useDashboardStats();
