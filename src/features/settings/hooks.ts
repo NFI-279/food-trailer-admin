@@ -2,7 +2,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { settingsApi } from "./api";
 import { toast } from "sonner";
-import { isAppAuthenticated } from "@/components/auth-guard";
 
 export const settingsKeys = {
   all: ["settings"] as const,
@@ -12,7 +11,6 @@ export function useSettings() {
   return useQuery({
     queryKey: settingsKeys.all,
     queryFn: settingsApi.getSettings,
-    enabled: isAppAuthenticated,
   });
 }
 
