@@ -119,6 +119,8 @@ export const translations = {
       btnSave: "Save Product",
       btnSaving: "Saving...",
       categoryPlaceholder: "Select a category",
+      image: "Image URL (Optional)",
+      imagePlaceholder: "https://your-image-link.com/mici.png",
     },
      categories: {
       grill: "Grill",
@@ -243,6 +245,8 @@ export const translations = {
       btnSave: "Salvează Produsul",
       btnSaving: "Se salvează...",
       categoryPlaceholder: "Selectează o categorie",
+      image: "Link Imagine (Opțional)",
+      imagePlaceholder: "https://link-imaginea-ta.com/mici.png",
     },
      categories: {
       grill: "Grătar",

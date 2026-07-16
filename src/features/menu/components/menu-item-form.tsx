@@ -147,6 +147,13 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
         </div>
       </div>
 
+      {/* --- NEW: IMAGE URL FIELD --- */}
+      <div className="space-y-2">
+        <Label htmlFor="imageUrl">{t.menuForm.image}</Label>
+        <Input id="imageUrl" placeholder={t.menuForm.imagePlaceholder} {...register("imageUrl")} />
+        {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl.message}</p>}
+      </div>
+
       {/* Description */}
       <div className="space-y-2">
         <Label htmlFor="description">{t.menuForm.desc}</Label>
