@@ -2,7 +2,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { menuApi } from "./api";
 import { MenuItemInput } from "./types";
-import { isAppAuthenticated } from "@/components/auth-guard";
 
 // Query Key factory (best practice to avoid typos)
 export const menuKeys = {
@@ -14,7 +13,6 @@ export function useMenu() {
   return useQuery({
     queryKey: menuKeys.all,
     queryFn: menuApi.getMenuItems,
-    enabled: isAppAuthenticated,
   });
 }
 
