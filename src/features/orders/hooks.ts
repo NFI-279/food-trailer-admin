@@ -1,7 +1,6 @@
 // src/features/orders/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ordersApi } from "./api";
-import { isAppAuthenticated } from "@/components/auth-guard";
 
 export const orderKeys = {
   active: ["orders", "active"] as const,
@@ -14,7 +13,6 @@ export function useActiveOrders() {
     queryKey: orderKeys.active,
     queryFn: ordersApi.getActiveOrders,
     refetchInterval: 3000, 
-    enabled: isAppAuthenticated, // <-- ADD THIS TO ALL 3 GET QUERIES!
   });
 }
 
@@ -36,7 +34,6 @@ export function useCompletedOrders() {
     queryKey: orderKeys.completed,
     queryFn: ordersApi.getCompletedOrders,
     refetchInterval: 3000,
-    enabled: isAppAuthenticated,
   });
 }
 
@@ -79,7 +76,6 @@ export function useUnpaidOrders() {
     queryKey: orderKeys.unpaid,
     queryFn: ordersApi.getUnpaidOrders,
     refetchInterval: 3000,
-    enabled: isAppAuthenticated,
   });
 }
 
