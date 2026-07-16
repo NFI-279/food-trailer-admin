@@ -1,10 +1,11 @@
+// [Frontend Admin] src/features/menu/components/menu-item-form.tsx
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { menuItemSchema, MenuItemInput } from "../types";
 import { useInventory } from "@/features/inventory/hooks"; 
-import { useLanguage } from "@/providers/LanguageProvider"; // <-- Import Language Hook
+import { useLanguage } from "@/providers/LanguageProvider";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,7 @@ interface MenuItemFormProps {
 
 export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFormProps) {
   const { data: inventoryItems } = useInventory(); 
-  const { t } = useLanguage(); // <-- Init Language Hook
+  const { t } = useLanguage(); 
 
   const {
     register,
@@ -75,7 +76,7 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
           {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
         </div>
 
-        {/* Category */}
+       {/* Category */}
         <div className="space-y-2">
           <Label>{t.menuForm.category}</Label>
           <Controller
@@ -84,7 +85,9 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
             render={({ field }) => (
               <Select onValueChange={field.onChange} value={field.value}>
                 <SelectTrigger>
-                  <SelectValue placeholder={t.menuForm.categoryPlaceholder} />
+                  <SelectValue placeholder={t.menuForm.categoryPlaceholder}>
+                    {field.value ? t.categories[field.value.toLowerCase() as keyof typeof t.categories] : t.menuForm.categoryPlaceholder}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Grill">{t.categories.grill}</SelectItem>
@@ -100,26 +103,37 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
 
       {/* Inventory Link Section */}
       <div className="grid grid-cols-2 gap-4 p-4 border rounded-md bg-muted/20">
+        
+        {/* THE INVENTORY DROPDOWN (Fixed!) */}
         <div className="space-y-2">
           <Label className="text-blue-600 font-bold">{t.menuForm.linkTitle}</Label>
           <Controller
             control={control}
             name="inventoryItemId"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value || "NONE"}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select ingredient" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="NONE">{t.menuForm.noTracking}</SelectItem>
-                  {inventoryItems?.map(item => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name} ({item.unit})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+            render={({ field }) => {
+              // Helper to find the name of the selected ingredient so it displays properly!
+              const selectedItem = inventoryItems?.find(i => i.id === field.value);
+              
+              return (
+                <Select onValueChange={field.onChange} value={field.value || "NONE"}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select ingredient">
+                      {field.value && field.value !== "NONE" && selectedItem
+                        ? `${selectedItem.name} (${selectedItem.unit})`
+                        : t.menuForm.noTracking}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="NONE">{t.menuForm.noTracking}</SelectItem>
+                    {inventoryItems?.map(item => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name} ({item.unit})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              );
+            }}
           />
         </div>
 
@@ -147,4 +161,4 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
       </div>
     </form>
   );
-} 
+}
