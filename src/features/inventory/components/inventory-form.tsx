@@ -41,20 +41,20 @@ export function InventoryForm({ initialData, onSubmit, isSubmitting }: Inventory
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Ingredient Name</Label>
-        <Input id="name" placeholder="e.g. Chifle" {...register("name")} />
+        <Label htmlFor="name">{t.inventoryForm.name}</Label>
+        <Input id="name" placeholder={t.inventoryForm.namePlaceholder} {...register("name")} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label>Unit of Measurement</Label>
+        <Label>{t.inventoryForm.unit}</Label>
         <Controller
           control={control}
           name="unit"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
               <SelectTrigger>
-                <SelectValue placeholder="Select unit" />
+                <SelectValue placeholder={t.inventoryForm.unitPlaceholder} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="buc">Bucăți (buc)</SelectItem>
@@ -69,7 +69,7 @@ export function InventoryForm({ initialData, onSubmit, isSubmitting }: Inventory
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="currentStock">Current Stock</Label>
+          <Label htmlFor="currentStock">{t.inventoryForm.stock}</Label>
           <Input 
             id="currentStock" 
             type="number" 
@@ -78,7 +78,7 @@ export function InventoryForm({ initialData, onSubmit, isSubmitting }: Inventory
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="lowStockThreshold">Alert Threshold</Label>
+          <Label htmlFor="lowStockThreshold">{t.inventoryForm.threshold}</Label>
           <Input 
             id="lowStockThreshold" 
             type="number" 
@@ -89,7 +89,7 @@ export function InventoryForm({ initialData, onSubmit, isSubmitting }: Inventory
 
       <div className="flex justify-end pt-4">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Item"}
+          {isSubmitting ? t.inventoryForm.btnSaving : t.inventoryForm.btnSave}
         </Button>
       </div>
     </form>
