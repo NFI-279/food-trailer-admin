@@ -4,6 +4,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { inventoryItemSchema, InventoryItemInput } from "../types";
+import { useLanguage } from "@/providers/LanguageProvider";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,7 @@ export function InventoryForm({ initialData, onSubmit, isSubmitting }: Inventory
       lowStockThreshold: "" as unknown as number,
     },
   });
+  const { t } = useLanguage();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
