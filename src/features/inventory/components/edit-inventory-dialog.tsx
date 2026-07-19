@@ -13,10 +13,12 @@ import {
 import { InventoryForm } from "./inventory-form";
 import { useUpdateInventoryItem } from "../hooks";
 import { InventoryItem, InventoryItemInput } from "../types";
+import { useLanguage } from "@/providers/LanguageProvider";
 
 export function EditInventoryDialog({ item }: { item: InventoryItem }) {
   const [open, setOpen] = useState(false);
   const updateMutation = useUpdateInventoryItem();
+  const { t } = useLanguage();
 
   const onSubmit = (data: InventoryItemInput) => {
     updateMutation.mutate({ id: item.id, data }, {
@@ -33,7 +35,7 @@ export function EditInventoryDialog({ item }: { item: InventoryItem }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Inventory Item</DialogTitle>
+            <DialogTitle>{t.inventoryForm.editTitle}</DialogTitle>
           </DialogHeader>
           {/* We pass the item as initialData here! */}
           <InventoryForm initialData={item} onSubmit={onSubmit} isSubmitting={updateMutation.isPending} />
