@@ -40,10 +40,10 @@ export function InventoryList() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[35%]">Ingredient</TableHead>
-            <TableHead className="w-[25%] hidden md:table-cell">Stock Health</TableHead>
-            <TableHead className="w-[15%]">Status</TableHead>
-            <TableHead className="w-[25%] text-right">Quick Update</TableHead>
+            <TableHead className="w-[35%]">{t.inventory.colIngredient}</TableHead>
+            <TableHead className="w-[25%] hidden md:table-cell">{t.inventory.colHealth}</TableHead>
+            <TableHead className="w-[15%]">{t.inventory.colStatus}</TableHead>
+            <TableHead className="w-[25%] text-right">{t.inventory.colUpdate}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -89,14 +89,14 @@ export function InventoryList() {
                 {/* 3. Status Badges */}
                 <TableCell>
                   {isCritical ? (
-                    <Badge variant="destructive" className="px-3 py-1 text-sm font-bold shadow-sm">OUT OF STOCK</Badge>
+                    <Badge variant="destructive" className="px-3 py-1 text-sm font-bold shadow-sm">{t.inventory.outOfStock}</Badge>
                   ) : isLowStock ? (
                     <Badge className="bg-orange-500 text-white hover:bg-orange-600 px-3 py-1 text-sm shadow-sm border-none">
-                      <AlertCircle className="h-4 w-4 mr-1 inline" /> Low
+                      <AlertCircle className="h-4 w-4 mr-1 inline" /> {t.inventory.low}
                     </Badge>
                   ) : (
                     <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100 px-3 py-1 text-sm">
-                      Healthy
+                      {t.inventory.healthy}
                     </Badge>
                   )}
                 </TableCell>
@@ -134,7 +134,7 @@ export function InventoryList() {
                       className="h-10 w-10 shrink-0 text-destructive hover:bg-destructive/10"
                       disabled={deleteStock.isPending}
                       onClick={() => {
-                        if (window.confirm("Delete this inventory item?")) {
+                        if (window.confirm(t.inventory.deleteConfirm)) {
                           deleteStock.mutate(item.id); 
                         }
                       }}
