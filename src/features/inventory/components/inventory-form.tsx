@@ -59,10 +59,10 @@ export function InventoryForm({ initialData, onSubmit, isSubmitting }: Inventory
                 <SelectValue placeholder={t.inventoryForm.unitPlaceholder} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="buc">Bucăți (buc)</SelectItem>
-                <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                <SelectItem value="litri">Liters (L)</SelectItem>
-                <SelectItem value="porții">Porții</SelectItem>
+                 <SelectItem value="buc">{t.inventoryForm.units.buc}</SelectItem>
+                <SelectItem value="kg">{t.inventoryForm.units.kg}</SelectItem>
+                <SelectItem value="litri">{t.inventoryForm.units.litri}</SelectItem>
+                <SelectItem value="porții">{t.inventoryForm.units.portii}</SelectItem>
               </SelectContent>
             </Select>
           )}
