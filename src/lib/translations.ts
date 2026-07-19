@@ -69,6 +69,24 @@ export const translations = {
       low: "Low",
       healthy: "Healthy",
     },
+     inventoryForm: {
+      name: "Ingredient Name",
+      namePlaceholder: "e.g. Chifle",
+      unit: "Unit of Measurement",
+      unitPlaceholder: "Select unit",
+      stock: "Current Stock",
+      threshold: "Alert Threshold",
+      btnSave: "Save Item",
+      btnSaving: "Saving...",
+      addTitle: "Add Inventory Item",
+      editTitle: "Edit Inventory Item",
+      units: {
+        buc: "Pieces (buc)",
+        kg: "Kilograms (kg)",
+        litri: "Liters (L)",
+        portii: "Portions",
+      }
+    },
     analytics: {
       title: "Analytics Overview",
       subtitle: "Track your revenue and orders over time.",
@@ -194,6 +212,24 @@ export const translations = {
       outOfStock: "STOC EPUIZAT",
       low: "Scăzut",
       healthy: "Optim",
+    },
+    inventoryForm: {
+      name: "Nume Ingredient",
+      namePlaceholder: "ex. Chifle",
+      unit: "Unitate de Măsură",
+      unitPlaceholder: "Selectează unitatea",
+      stock: "Stoc Curent",
+      threshold: "Prag Alertă",
+      btnSave: "Salvează Articolul",
+      btnSaving: "Se salvează...",
+      addTitle: "Adaugă Articol",
+      editTitle: "Editează Articolul",
+      units: {
+        buc: "Bucăți (buc)",
+        kg: "Kilograme (kg)",
+        litri: "Litri (L)",
+        portii: "Porții",
+      }
     },
     analytics: {
       title: "Statistici",
