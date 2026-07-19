@@ -4,6 +4,7 @@
 import { EditInventoryDialog } from "./edit-inventory-dialog";
 import { useInventory, useAdjustStock, useDeleteInventoryItem } from "../hooks";
 import { Trash2, Plus, Minus, AlertCircle } from "lucide-react";
+import { useLanguage } from "@/providers/LanguageProvider";
 import {
   Table,
   TableBody,
@@ -20,6 +21,7 @@ export function InventoryList() {
   const { data: inventory, isLoading, isError } = useInventory();
   const adjustStock = useAdjustStock();
   const deleteStock = useDeleteInventoryItem();
+  const { t } = useLanguage();
 
   if (isLoading) {
     return (
