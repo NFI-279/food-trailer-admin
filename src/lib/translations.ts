@@ -68,6 +68,7 @@ export const translations = {
       outOfStock: "OUT OF STOCK",
       low: "Low",
       healthy: "Healthy",
+      deleteConfirm: "Delete this inventory item?",
     },
      inventoryForm: {
       name: "Ingredient Name",
@@ -212,6 +213,7 @@ export const translations = {
       outOfStock: "STOC EPUIZAT",
       low: "Scăzut",
       healthy: "Optim",
+      deleteConfirm: "Ștergi acest articol din inventar?",
     },
     inventoryForm: {
       name: "Nume Ingredient",
