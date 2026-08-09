@@ -148,27 +148,7 @@ return (
           <CardDescription>{t.settings.securityDesc}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          /*<form 
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setIsChangingPass(true);
-              const form = e.target as HTMLFormElement;
-              const oldPass = (form.elements.namedItem('oldPass') as HTMLInputElement).value;
-              const newPass = (form.elements.namedItem('newPass') as HTMLInputElement).value;
-              
-              try {
-                await authApi.changePassword(oldPass, newPass);
-                toast.success(t.settings.passSuccess);
-                form.reset();
-              } catch (err: any) {
-                toast.error(err.message || t.settings.passFail);
-              } finally {
-                setIsChangingPass(false);
-              }
-            }}
-            className="flex flex-col sm:flex-row gap-4 items-end"
-          >*/
-            <form 
+          <form 
             onSubmit={(e) => {
               e.preventDefault();
               // DEMO MODE: Polite popup instead of actual API call
