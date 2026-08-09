@@ -148,7 +148,7 @@ return (
           <CardDescription>{t.settings.securityDesc}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form 
+          /*<form 
             onSubmit={async (e) => {
               e.preventDefault();
               setIsChangingPass(true);
@@ -165,6 +165,14 @@ return (
               } finally {
                 setIsChangingPass(false);
               }
+            }}
+            className="flex flex-col sm:flex-row gap-4 items-end"
+          >*/
+            <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              // DEMO MODE: Polite popup instead of actual API call
+              toast.info("Demo Mode: Password changes are disabled.");
             }}
             className="flex flex-col sm:flex-row gap-4 items-end"
           >
