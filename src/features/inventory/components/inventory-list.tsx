@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function InventoryList() {
-  const { data: inventory, isLoading, isError } = useInventory();
+  const { data: inventory, isLoading, isError, error, refetch } = useInventory();
   const adjustStock = useAdjustStock();
   const deleteStock = useDeleteInventoryItem();
   const { t } = useLanguage();
@@ -34,18 +34,25 @@ export function InventoryList() {
   }
 
   if (isError) {
-    return <div className="text-destructive font-bold">Failed to load inventory.</div>;
+    return (
+      <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 font-bold text-destructive">
+        <p>{error instanceof Error ? error.message : "Failed to load inventory."}</p>
+        <Button variant="outline" className="mt-3" onClick={() => refetch()}>
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div className="rounded-md border bg-card shadow-sm">
-      <Table>
+      <Table className="min-w-[680px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[35%]">{t.inventory.colIngredient}</TableHead>
             <TableHead className="w-[25%] hidden md:table-cell">{t.inventory.colHealth}</TableHead>
             <TableHead className="w-[15%]">{t.inventory.colStatus}</TableHead>
-            <TableHead className="w-[25%] text-right">{t.inventory.colUpdate}</TableHead>
+            <TableHead className="sticky right-0 w-[25%] bg-card text-right">{t.inventory.colUpdate}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -104,11 +111,12 @@ export function InventoryList() {
                 </TableCell>
 
                 {/* 4. Action Buttons (+, -, Trash) */}
-                <TableCell className="text-right">
+                <TableCell className="sticky right-0 bg-card text-right">
                   <div className="flex items-center justify-end gap-3">
                     <Button
                       variant="outline"
                       size="icon"
+                      aria-label={`Decrease ${item.name} stock`}
                       className="h-10 w-10 shrink-0"
                       disabled={adjustStock.isPending || item.currentStock <= 0}
                       onClick={() => adjustStock.mutate({ id: item.id, delta: -1 })}
@@ -123,6 +131,7 @@ export function InventoryList() {
                     <Button
                       variant="outline"
                       size="icon"
+                      aria-label={`Increase ${item.name} stock`}
                       className="h-10 w-10 shrink-0"
                       disabled={adjustStock.isPending}
                       onClick={() => adjustStock.mutate({ id: item.id, delta: 1 })}
@@ -133,6 +142,7 @@ export function InventoryList() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label={`Delete ${item.name}`}
                       className="h-10 w-10 shrink-0 text-destructive hover:bg-destructive/10"
                       disabled={deleteStock.isPending}
                       onClick={() => {
@@ -149,6 +159,13 @@ export function InventoryList() {
               </TableRow>
             );
           })}
+          {inventory?.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={4} className="h-32 text-center text-muted-foreground">
+                No inventory items found.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

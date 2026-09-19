@@ -56,9 +56,9 @@ export function OrderCard({ order }: OrderCardProps) {
   if (order.status === 'PENDING') headerColor = "bg-amber-100 dark:bg-amber-900/30";
 
   return (
-    <Card className={`flex flex-col h-full border-2 shadow-sm ${order.status === "COMPLETED" ? "bg-muted/50 border-muted opacity-80" : "border-muted"}`}>
+    <Card className={`flex h-full flex-col border-2 shadow-sm ${order.status === "COMPLETED" ? "border-muted bg-muted/50 opacity-80" : "border-muted"}`}>
       
-      <CardHeader className={`pb-3 flex flex-row items-center justify-between rounded-t-lg ${headerColor}`}>
+      <CardHeader className={`flex flex-row items-center justify-between gap-3 rounded-t-lg pb-3 ${headerColor}`}>
         <CardTitle className="text-3xl font-black">#{order.orderNumber}</CardTitle>
         <Badge variant="secondary" className="flex items-center gap-1 text-sm px-2 py-1">
           <Clock className="h-4 w-4" />
@@ -79,7 +79,7 @@ export function OrderCard({ order }: OrderCardProps) {
         </ul>
       </CardContent>
 
-      <CardFooter className="pt-4 border-t mt-auto">
+      <CardFooter className="sticky bottom-0 mt-auto border-t bg-card/95 pt-4 backdrop-blur supports-[backdrop-filter]:bg-card/80">
         
         {/* NEW STATE: UNPAID (Waiting for Cash at the window) */}
         {order.status === "UNPAID" && (

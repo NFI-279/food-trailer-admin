@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { UtensilsCrossed } from "lucide-react";
 import { toast } from "sonner";
+import { setAccessToken } from "@/lib/auth-session";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,15 +26,14 @@ export default function LoginPage() {
       // 1. Send credentials to the backend
       const data = await authApi.login(username, password);
       
-      // 2. Save the secure token to the browser's Local Storage
-      localStorage.setItem("trailer_token", data.access_token);
+      setAccessToken(data.access_token);
       
       toast.success("Login successful!");
       
       // 3. Redirect to the dashboard
       router.push("/");
     } catch (error) {
-      toast.error("Invalid username or password.");
+      toast.error(error instanceof Error ? error.message : "Unable to sign in.");
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +61,8 @@ export default function LoginPage() {
                 id="username" 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required 
+                required
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">
@@ -71,7 +72,8 @@ export default function LoginPage() {
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
+                autoComplete="current-password"
               />
             </div>
             <Button type="submit" className="w-full h-12 text-lg font-bold" disabled={isLoading}>

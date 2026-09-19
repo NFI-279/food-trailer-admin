@@ -1,54 +1,63 @@
-// [Frontend] src/lib/api-client.ts
+import { clearAccessToken, getAccessToken } from "@/lib/auth-session";
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-export async function apiFetch(endpoint: string, options: RequestInit = {}) {
-  // Grab the token
-  const token = typeof window !== "undefined" ? localStorage.getItem("trailer_token") : null;
+export async function apiFetch<T>(
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const token = getAccessToken();
+  const headers = new Headers(options.headers);
 
-  // Attach the token to the headers
-  const headers = {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
-  };
+  if (!headers.has("Content-Type") && options.body) {
+    headers.set("Content-Type", "application/json");
+  }
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  let response: Response;
+  try {
+    const url = endpoint.startsWith("http") ? endpoint : `${API_BASE_URL}${endpoint}`;
+    response = await fetch(url, {
+      ...options,
+      headers,
+    });
+  } catch {
+    throw new Error("Unable to reach the API. Check the connection and try again.");
+  }
 
-  // If the backend says the token is invalid/expired, log them out!
   if (response.status === 401) {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("trailer_token");
-      window.location.href = "/login";
+      clearAccessToken();
+      if (window.location.pathname !== "/login") {
+        window.location.assign("/login?reason=expired");
+      }
     }
     throw new Error("Session expired. Please log in again.");
   }
 
   if (!response.ok) {
-    let errorMessage = `API error: ${response.statusText}`;
+    let errorMessage = `API request failed (${response.status}).`;
     try {
       const errorData = await response.json();
-      if (errorData && errorData.message) {
-        errorMessage = Array.isArray(errorData.message) ? errorData.message.join(', ') : errorData.message;
+      if (errorData?.message) {
+        errorMessage = Array.isArray(errorData.message)
+          ? errorData.message.join(", ")
+          : String(errorData.message);
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch {
-      // Ignore if it's not JSON
+      if (response.statusText) errorMessage = response.statusText;
     }
     throw new Error(errorMessage);
   }
 
-  // Handle empty responses (like when we DELETE something)
   const text = await response.text();
-  if (!text) return null;
+  if (!text) return null as T;
 
   try {
-    return JSON.parse(text);
-  } catch (e) {
-    //console.error("Failed to parse API response as JSON:", text);
+    return JSON.parse(text) as T;
+  } catch {
     throw new Error("Received malformed data from the server.");
   }
 }

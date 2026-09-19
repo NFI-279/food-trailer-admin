@@ -2,10 +2,11 @@
 "use client";
 
 import { useAnalyticsChart } from "../hooks";
-import { Bar, BarChart, CartesianGrid, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 const chartConfig = {
   revenue: {
@@ -15,10 +16,21 @@ const chartConfig = {
 };
 
 export function RevenueChart() {
-  const { data: chartData, isLoading } = useAnalyticsChart();
+  const { data: chartData, isLoading, isError, error, refetch } = useAnalyticsChart();
 
-  if (isLoading || !chartData) {
+  if (isLoading) {
     return <Skeleton className="h-[400px] w-full rounded-xl" />;
+  }
+
+  if (isError || !chartData) {
+    return (
+      <Card>
+        <CardContent className="space-y-3 p-6 text-destructive">
+          <p>{error instanceof Error ? error.message : "Failed to load revenue data."}</p>
+          <Button variant="outline" onClick={() => refetch()}>Try again</Button>
+        </CardContent>
+      </Card>
+    );
   }
 
   // Calculate the total 7-day revenue for the header

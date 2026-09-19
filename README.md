@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Admin authentication
+
+The API remains a separate origin and the login contract continues to return a JWT in
+`access_token`. Because this frontend cannot set an HttpOnly cookie for that API origin,
+the token is held in memory only and is never written to `localStorage` or
+`sessionStorage`. This limits token exposure and ensures logout/401 expiry clears the
+token immediately, but a full page reload requires signing in again. A future same-origin
+proxy or backend-managed HttpOnly cookie can remove that limitation.
+
 ## Getting Started
 
 First, run the development server:

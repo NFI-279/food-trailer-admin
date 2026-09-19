@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Banknote } from "lucide-react";
 
 export function UnpaidOrdersList() {
-  const { data: orders, isLoading, isError } = useUnpaidOrders();
+  const { data: orders, isLoading, isError, error, refetch } = useUnpaidOrders();
   const { t } = useLanguage();
 
   if (isLoading) {
@@ -19,14 +19,21 @@ export function UnpaidOrdersList() {
     );
   }
 
-  if (isError) return <div className="text-destructive font-semibold">Error.</div>;
+  if (isError) {
+    return (
+      <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 font-semibold text-destructive">
+        <p>{error instanceof Error ? error.message : "Failed to load unpaid orders."}</p>
+        <button className="mt-3 underline" onClick={() => refetch()}>Try again</button>
+      </div>
+    );
+  }
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[50vh] text-muted-foreground bg-muted/10 rounded-2xl border-2 border-dashed">
-        <Banknote className="h-16 w-16 mb-4 opacity-50" />
+      <div className="flex min-h-[18rem] flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-muted/10 px-4 py-8 text-center text-muted-foreground sm:min-h-[22rem]">
+        <Banknote className="mb-4 h-14 w-14 opacity-50 sm:h-16 sm:w-16" />
         <h3 className="text-xl font-bold">{t.orders.noUnpaid}</h3>
-        <p>{t.orders.noUnpaidDesc}</p>
+        <p className="max-w-sm">{t.orders.noUnpaidDesc}</p>
       </div>
     );
   }

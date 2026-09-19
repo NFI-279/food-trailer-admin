@@ -11,15 +11,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <AuthGuard>
       <SidebarProvider>
         <AppSidebar />
-        <main className="flex-1 flex flex-col h-screen overflow-hidden w-full bg-muted/20">
-          <header className="flex h-16 shrink-0 items-center gap-4 border-b bg-background px-6">
+        <main className="flex h-screen min-w-0 flex-1 flex-col overflow-hidden bg-[radial-gradient(circle_at_left,rgba(120,82,52,0.05),transparent_24rem)] bg-muted/20">
+          <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border/60 bg-background/80 px-4 backdrop-blur-sm sm:h-16 sm:gap-4 sm:px-6">
             <SidebarTrigger /> 
             {/* Translated Header! */}
-            <h1 className="font-semibold text-lg">{t.header}</h1>
+            <h1 className="truncate text-base font-semibold sm:text-lg">{t.header}</h1>
           </header>
           
-          <div className="flex-1 overflow-auto p-4 md:p-6">
-            {children}
+          <div className="min-w-0 flex-1 overflow-auto px-4 py-5 sm:p-6">
+            <div className="mx-auto w-full max-w-screen-2xl">{children}</div>
           </div>
         </main>
       </SidebarProvider>
