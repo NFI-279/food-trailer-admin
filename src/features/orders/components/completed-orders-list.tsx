@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { History } from "lucide-react";
 
 export function CompletedOrdersList() {
-  const { data: orders, isLoading, isError } = useCompletedOrders();
+  const { data: orders, isLoading, isError, error, refetch } = useCompletedOrders();
 
   if (isLoading) {
     return (
@@ -17,14 +17,21 @@ export function CompletedOrdersList() {
     );
   }
 
-  if (isError) return <div className="text-destructive font-semibold">Failed to load completed orders.</div>;
+  if (isError) {
+    return (
+      <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 font-semibold text-destructive">
+        <p>{error instanceof Error ? error.message : "Failed to load completed orders."}</p>
+        <button className="mt-3 underline" onClick={() => refetch()}>Try again</button>
+      </div>
+    );
+  }
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[50vh] text-muted-foreground bg-muted/10 rounded-2xl border-2 border-dashed">
-        <History className="h-16 w-16 mb-4 opacity-50" />
+      <div className="flex min-h-[18rem] flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-muted/10 px-4 py-8 text-center text-muted-foreground sm:min-h-[22rem]">
+        <History className="mb-4 h-14 w-14 opacity-50 sm:h-16 sm:w-16" />
         <h3 className="text-xl font-bold">No completed orders yet</h3>
-        <p>Orders finished today will appear here.</p>
+        <p className="max-w-sm">Orders finished today will appear here.</p>
       </div>
     );
   }

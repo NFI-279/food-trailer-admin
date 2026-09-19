@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button"; // Make sure Button is imported
 import { useLanguage } from "@/providers/LanguageProvider";
 
 export function MenuList() {
-  const { data: menuItems, isLoading, isError } = useMenu();
+  const { data: menuItems, isLoading, isError, error, refetch } = useMenu();
   const toggleMutation = useToggleAvailability();
   const deleteMutation = useDeleteMenuItem();
   const { t } = useLanguage();
@@ -34,12 +34,19 @@ export function MenuList() {
   }
 
   if (isError) {
-    return <div className="text-destructive">Failed to load menu.</div>;
+    return (
+      <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-destructive">
+        <p>{error instanceof Error ? error.message : "Failed to load menu."}</p>
+        <Button variant="outline" className="mt-3" onClick={() => refetch()}>
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div className="rounded-md border bg-card">
-      <Table>
+      <Table className="min-w-[640px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[40%]">{t.menu.colName}</TableHead>
@@ -71,6 +78,7 @@ export function MenuList() {
                 <div className="flex items-center justify-end gap-4">
                   {/* The Availability Switch */}
                   <Switch
+                    aria-label={`Toggle availability for ${item.name}`}
                     checked={item.isAvailable}
                     disabled={toggleMutation.isPending}
                     onCheckedChange={() => toggleMutation.mutate(item.id)}
@@ -80,7 +88,8 @@ export function MenuList() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                    aria-label={`Delete ${item.name}`}
+                    className="h-10 w-10 text-destructive hover:bg-destructive/10 hover:text-destructive"
                     disabled={deleteMutation.isPending}
                     onClick={() => {
                       if (window.confirm("Are you sure you want to delete this item?")) {

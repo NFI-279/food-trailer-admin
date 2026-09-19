@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ClipboardCheck } from "lucide-react";
 
 export function ActiveOrdersList() {
-  const { data: orders, isLoading, isError } = useActiveOrders();
+  const { data: orders, isLoading, isError, error, refetch } = useActiveOrders();
   const { data: settings } = useSettings();
   const { t } = useLanguage(); // <-- INIT HOOK
 
@@ -55,15 +55,22 @@ export function ActiveOrdersList() {
     );
   }
 
-  if (isError) return <div className="text-destructive font-semibold">Error.</div>;
+  if (isError) {
+    return (
+      <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 font-semibold text-destructive">
+        <p>{error instanceof Error ? error.message : "Failed to load active orders."}</p>
+        <button className="mt-3 underline" onClick={() => refetch()}>Try again</button>
+      </div>
+    );
+  }
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[50vh] text-muted-foreground bg-muted/10 rounded-2xl border-2 border-dashed">
-        <ClipboardCheck className="h-16 w-16 mb-4 opacity-50" />
+      <div className="flex min-h-[18rem] flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-muted/10 px-4 py-8 text-center text-muted-foreground sm:min-h-[22rem]">
+        <ClipboardCheck className="mb-4 h-14 w-14 opacity-50 sm:h-16 sm:w-16" />
         {/* TRANSLATED! */}
         <h3 className="text-xl font-bold">{t.orders.noActive}</h3>
-        <p>{t.orders.noActiveDesc}</p>
+        <p className="max-w-sm">{t.orders.noActiveDesc}</p>
       </div>
     );
   }

@@ -19,21 +19,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-
-// Our navigation menu items.
-const items = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Active Orders", url: "/orders", icon: ClipboardList },
-  { title: "Menu Management", url: "/menu", icon: UtensilsCrossed },
-  { title: "Inventory", url: "/inventory", icon: Package },
-  { title: "Analytics", url: "/analytics", icon: LineChart },
-  { title: "Settings", url: "/settings", icon: Settings },
-];
+import { LogOut } from "lucide-react";
+import { clearAccessToken } from "@/lib/auth-session";
+import { usePathname } from "next/navigation";
 
 export function AppSidebar() {
   const { t } = useLanguage()
+  const pathname = usePathname();
   const items = [
     { title: t.sidebar.dashboard, url: "/", icon: LayoutDashboard },
     { title: t.sidebar.orders, url: "/orders", icon: ClipboardList },
@@ -43,20 +38,26 @@ export function AppSidebar() {
     { title: t.sidebar.settings, url: "/settings", icon: Settings },
   ];
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar variant="floating" className="py-3 pl-3 pr-2">
+      <SidebarContent className="rounded-2xl bg-sidebar/95 shadow-[0_12px_30px_-24px_rgba(45,32,24,0.7)] ring-1 ring-sidebar-border/60">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sm font-bold uppercase tracking-wider text-primary">
-            Food Trailer Admin
+          <SidebarGroupLabel className="h-auto flex-col items-start gap-1 px-4 py-4 text-sidebar-foreground">
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/60">
+              Food Trailer
+            </span>
+            <span className="text-base font-bold tracking-tight text-sidebar-foreground">
+              Admin
+            </span>
           </SidebarGroupLabel>
-          <SidebarGroupContent className="mt-4">
-            <SidebarMenu className="gap-2">
+          <SidebarGroupContent className="mt-3">
+            <SidebarMenu className="gap-1">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   {/* Changed 'asChild' to the new 'render' prop pattern */}
                   <SidebarMenuButton 
-                    tooltip={item.title} 
-                    className="py-5"
+                    tooltip={item.title}
+                    isActive={pathname === item.url}
+                    className="h-11 rounded-xl px-3 text-sm font-medium text-sidebar-foreground/75 data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground data-active:shadow-sm"
                     render={<Link href={item.url} />}
                   >
                     <item.icon className="h-5 w-5" />
@@ -68,6 +69,23 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="px-2 pb-3">
+        <SidebarMenu className="border-t border-sidebar-border/50 pt-3">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip="Sign out"
+              className="h-11 rounded-xl text-sidebar-foreground/70"
+              onClick={() => {
+                clearAccessToken();
+                window.location.assign("/login");
+              }}
+            >
+              <LogOut className="h-5 w-5" />
+              <span className="text-base">Sign out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

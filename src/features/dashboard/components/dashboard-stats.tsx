@@ -7,9 +7,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Banknote, ShoppingBag, ClipboardList, AlertTriangle } from "lucide-react";
 import { useLanguage } from "@/providers/LanguageProvider";
 import { Badge } from "@/components/ui/badge"; 
+import { Button } from "@/components/ui/button";
 
 export function DashboardStats() {
-  const { data: stats, isLoading, isError } = useDashboardStats();
+  const { data: stats, isLoading, isError, error, refetch } = useDashboardStats();
   const { t } = useLanguage();
 
   if (isLoading) {
@@ -23,7 +24,14 @@ export function DashboardStats() {
   }
 
   if (isError || !stats) {
-    return <div className="text-destructive">Failed to load dashboard stats.</div>;
+    return (
+      <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-destructive">
+        <p>{error instanceof Error ? error.message : "Failed to load dashboard stats."}</p>
+        <Button variant="outline" className="mt-3" onClick={() => refetch()}>
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   return (

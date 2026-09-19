@@ -2,17 +2,13 @@
 "use client";
 import { DashboardStats } from "@/features/dashboard/components/dashboard-stats";
 import { useLanguage } from "@/providers/LanguageProvider";
+import { PageHeader } from "@/components/layout/page-header";
 
 export default function DashboardPage() {
   const { t } = useLanguage();
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">{t.dashboard.title}</h2>
-        <p className="text-muted-foreground">
-          {t.dashboard.subtitle}
-        </p>  
-      </div>
+      <PageHeader title={t.dashboard.title} description={t.dashboard.subtitle} />
       
       {/* Dynamic stats component */}
       <DashboardStats />

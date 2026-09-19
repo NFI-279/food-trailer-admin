@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { menuItemSchema, MenuItemInput } from "../types";
 import { useInventory } from "@/features/inventory/hooks"; 
 import { useLanguage } from "@/providers/LanguageProvider";
+import { localizedSchemaMessage } from "@/lib/validation-messages";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +28,7 @@ interface MenuItemFormProps {
 
 export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFormProps) {
   const { data: inventoryItems } = useInventory(); 
-  const { t } = useLanguage(); 
+  const { language, t } = useLanguage();
 
   const {
     register,
@@ -65,7 +66,7 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
       <div className="space-y-2">
         <Label htmlFor="name">{t.menuForm.name}</Label>
         <Input id="name" placeholder={t.menuForm.namePlaceholder} {...register("name")} />
-        {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+        {errors.name && <p className="text-sm text-destructive">{localizedSchemaMessage(language, errors.name.message)}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -73,7 +74,7 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
         <div className="space-y-2">
           <Label htmlFor="price">{t.menuForm.price}</Label>
           <Input id="price" type="number" step="0.1" {...register("price", { valueAsNumber: true })} />
-          {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
+            {errors.price && <p className="text-sm text-destructive">{localizedSchemaMessage(language, errors.price.message)}</p>}
         </div>
 
        {/* Category */}
@@ -102,11 +103,11 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
       </div>
 
       {/* Inventory Link Section */}
-      <div className="grid grid-cols-2 gap-4 p-4 border rounded-md bg-muted/20">
+      <div className="grid min-w-0 gap-4 rounded-md border border-border/70 bg-muted/30 p-4 sm:grid-cols-[minmax(0,1.45fr)_minmax(9rem,0.75fr)]">
         
         {/* THE INVENTORY DROPDOWN (Fixed!) */}
         <div className="space-y-2">
-          <Label className="text-blue-600 font-bold">{t.menuForm.linkTitle}</Label>
+          <Label className="font-bold text-primary">{t.menuForm.linkTitle}</Label>
           <Controller
             control={control}
             name="inventoryItemId"
@@ -116,7 +117,7 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
               
               return (
                 <Select onValueChange={field.onChange} value={field.value || "NONE"}>
-                  <SelectTrigger>
+                    <SelectTrigger className="w-full min-w-0">
                     <SelectValue placeholder="Select ingredient">
                       {field.value && field.value !== "NONE" && selectedItem
                         ? `${selectedItem.name} (${selectedItem.unit})`
@@ -138,8 +139,9 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
         </div>
 
         <div className="space-y-2">
-          <Label>{t.menuForm.deduct}</Label>
+          <Label className="min-h-10 content-center">{t.menuForm.deduct}</Label>
           <Input 
+            className="w-full"
             type="number" 
             step="0.1" 
             {...register("inventoryDeduction", { valueAsNumber: true })} 
@@ -151,7 +153,7 @@ export function MenuItemForm({ initialData, onSubmit, isSubmitting }: MenuItemFo
       <div className="space-y-2">
         <Label htmlFor="imageUrl">{t.menuForm.image}</Label>
         <Input id="imageUrl" placeholder={t.menuForm.imagePlaceholder} {...register("imageUrl")} />
-        {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl.message}</p>}
+        {errors.imageUrl && <p className="text-sm text-destructive">{localizedSchemaMessage(language, errors.imageUrl.message)}</p>}
       </div>
 
       {/* Description */}
